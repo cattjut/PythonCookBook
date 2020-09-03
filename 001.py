@@ -1,5 +1,23 @@
 #/usr/bin/env python3
 
+from collections import deque
+
+def search(lines, pattern, history=5):
+    previous_lines = deque(maxlen=history)
+    for line in lines:
+        if pattern in line:
+           yield line, previous_lines
+        previous_lines.append(line)
+        
+# Example use on a file
+if __name__ == '__main__':
+   with open('somefile.txt') as f:
+        for line, prevlines in search(f, 'python', 5):
+            for pline in prevlines:
+               print(pline, end='')
+        print(line, end='')
+        print('-'*20)
+
 p = (4, 5)
 x, y = p
 
@@ -47,20 +65,3 @@ uname, *fields, homedir, sh = line.split(':')
 
 record = ('ACME', 50, 123.45, (12, 18, 2012))
 name, *_, (*_, year) = record
-
-from collections import deque
-
-def search(lines, pattern, history=5):
-    previous_lines = deque(maxlen=history)
-    for line in lines:
-        if pattern in line:
-           yield line, previous_lines
-        previous_lines.append(line)
-# Example use on a file
-if __name__ == '__main__':
-   with open('somefile.txt') as f:
-        for line, prevlines in search(f, 'python', 5):
-            for pline in prevlines:
-               print(pline, end='')
-        print(line, end='')
-        print('-'*20)
